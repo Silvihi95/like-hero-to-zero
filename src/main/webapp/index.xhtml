@@ -21,10 +21,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .header h1 {
-            margin: 0;
-            font-size: 28px;
-        }
+        .header h1 { margin: 0; font-size: 28px; }
         .header a {
             color: white;
             text-decoration: none;
@@ -32,9 +29,7 @@
             padding: 8px 16px;
             border-radius: 4px;
         }
-        .header a:hover {
-            background-color: #4caf50;
-        }
+        .header a:hover { background-color: #4caf50; }
         .container {
             max-width: 900px;
             margin: 40px auto;
@@ -47,10 +42,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 24px;
         }
-        .search-box h2 {
-            margin-top: 0;
-            color: #2e7d32;
-        }
+        .search-box h2 { margin-top: 0; color: #2e7d32; }
         .search-box input[type="text"] {
             padding: 10px;
             font-size: 16px;
@@ -68,19 +60,15 @@
             cursor: pointer;
             margin-left: 8px;
         }
-        .search-box input[type="submit"]:hover {
-            background-color: #4caf50;
-        }
+        .search-box input[type="submit"]:hover { background-color: #4caf50; }
         .results {
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             overflow: hidden;
+            margin-bottom: 24px;
         }
-        .results table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .results table { width: 100%; border-collapse: collapse; }
         .results th {
             background-color: #2e7d32;
             color: white;
@@ -91,16 +79,21 @@
             padding: 12px 16px;
             border-bottom: 1px solid #eee;
         }
-        .results tr:last-child td {
-            border-bottom: none;
+        .results tr:last-child td { border-bottom: none; }
+        .results tr:hover td { background-color: #f9f9f9; }
+        .message { margin-top: 12px; color: #c62828; font-weight: bold; }
+        .all-data {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 24px;
         }
-        .results tr:hover td {
-            background-color: #f9f9f9;
-        }
-        .message {
-            margin-top: 12px;
-            color: #c62828;
-            font-weight: bold;
+        .all-data h2 {
+            margin: 0;
+            padding: 16px 20px;
+            color: #2e7d32;
+            border-bottom: 2px solid #2e7d32;
         }
     </style>
 </h:head>
@@ -114,18 +107,18 @@
         <div class="search-box">
             <h2>CO2 Emissionen weltweit</h2>
             <h:form>
-                <h:inputText value="#{co2Controller.selectedCountryCode}" 
+                <h:inputText value="#{co2Controller.selectedCountryCode}"
                              placeholder="Ländercode (z.B. DE)" />
                 <h:commandButton value="Suchen" action="#{co2Controller.search}" />
                 <div class="message">
-                    <h:outputText value="#{co2Controller.message}" 
+                    <h:outputText value="#{co2Controller.message}"
                                   rendered="#{not empty co2Controller.message}" />
                 </div>
             </h:form>
         </div>
 
         <div class="results" rendered="#{not empty co2Controller.results}">
-            <h:dataTable value="#{co2Controller.results}" var="e" 
+            <h:dataTable value="#{co2Controller.results}" var="e"
                          rendered="#{not empty co2Controller.results}">
                 <h:column>
                     <f:facet name="header">Land</f:facet>
@@ -140,6 +133,30 @@
                     #{e.emissionKt}
                 </h:column>
             </h:dataTable>
+        </div>
+
+        <div class="all-data">
+            <h2>🌐 Alle Länder im Überblick</h2>
+            <div class="results">
+                <h:dataTable value="#{co2Controller.allLatestEmissions}" var="e">
+                    <h:column>
+                        <f:facet name="header">Land</f:facet>
+                        #{e.country.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Ländercode</f:facet>
+                        #{e.country.countryCode}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Jahr</f:facet>
+                        #{e.year}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">CO2 Ausstoß (kt)</f:facet>
+                        #{e.emissionKt}
+                    </h:column>
+                </h:dataTable>
+            </div>
         </div>
     </div>
 </h:body>

@@ -42,4 +42,13 @@ public class Co2EmissionService {
         Co2Emission e = em.find(Co2Emission.class, id);
         if (e != null) em.remove(e);
     }
+
+    public List<Co2Emission> findLatestForAllCountries() {
+        return em.createQuery(
+            "SELECT e FROM Co2Emission e WHERE e.year = " +
+            "(SELECT MAX(e2.year) FROM Co2Emission e2 WHERE e2.country = e.country) " +
+            "ORDER BY e.country.name ASC",
+            Co2Emission.class)
+            .getResultList();
+    }
 }

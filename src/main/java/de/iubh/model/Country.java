@@ -6,21 +6,27 @@ package de.iubh.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity-Klasse für ein Land.
+ * Repräsentiert einen Datensatz in der Tabelle "countries".
+ */
 @Entity
 @Table(name = "countries")
 public class Country {
 
+    /** Eindeutiger Primärschlüssel, wird automatisch generiert. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** Name des Landes, z.B. "Deutschland". */
     @Column(nullable = false)
     private String name;
 
+    /** ISO 3166-1 alpha-2 Ländercode, z.B. "DE". */
     @Column(name = "country_code", nullable = false)
     private String countryCode;
 
-    // Getters und Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

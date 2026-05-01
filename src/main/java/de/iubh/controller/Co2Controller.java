@@ -77,4 +77,11 @@ public class Co2Controller {
     public void setNewEmission(Co2Emission newEmission) { this.newEmission = newEmission; }
     public String getSelectedCountryCodeForNew() { return selectedCountryCodeForNew; }
     public void setSelectedCountryCodeForNew(String s) { this.selectedCountryCodeForNew = s; }
+      /**
+     * Gibt die aktuellste CO2-Emission für alle Länder zurück.
+     * @return Liste aller aktuellsten Emissionen sortiert nach CO2-Ausstoß
+     */
+    public List<Co2Emission> getAllLatestEmissions() {
+        return co2Service.findLatestForAllCountries();
+    }
 }

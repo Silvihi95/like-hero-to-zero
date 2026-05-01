@@ -6,25 +6,33 @@ package de.iubh.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity-Klasse für eine CO2-Emission.
+ * Repräsentiert einen Datensatz in der Tabelle "co2_emissions".
+ * Jede Emission ist einem Land zugeordnet.
+ */
 @Entity
 @Table(name = "co2_emissions")
 public class Co2Emission {
 
+    /** Eindeutiger Primärschlüssel, wird automatisch generiert. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** Jahr der Messung, z.B. 2023. */
     @Column(nullable = false)
     private int year;
 
+    /** CO2-Ausstoß in Kilotonnen (kt). */
     @Column(name = "emission_kt", nullable = false)
     private double emissionKt;
 
+    /** Das Land dem diese Emission zugeordnet ist. */
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
-    // Getters und Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public int getYear() { return year; }

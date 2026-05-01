@@ -10,17 +10,32 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 
+/**
+ * JSF Backing Bean für den Login.
+ * Verwaltet die Benutzeranmeldung und Session.
+ * SessionScoped: bleibt für die gesamte Browser-Session aktiv.
+ */
 @Named
 @SessionScoped
 public class LoginController implements Serializable {
 
+    /** Service für Wissenschaftler-Operationen. */
     @Inject
     private ScientistService scientistService;
 
+    /** Eingegebener Benutzername. */
     private String username;
+
+    /** Eingegebenes Passwort. */
     private String password;
+
+    /** Gibt an ob der Benutzer eingeloggt ist. */
     private boolean loggedIn = false;
 
+    /**
+     * Überprüft die Login-Daten und leitet bei Erfolg zum Dashboard weiter.
+     * @return Navigation zum Dashboard oder null bei Fehler
+     */
     public String login() {
         if (scientistService.login(username, password)) {
             loggedIn = true;
@@ -29,6 +44,10 @@ public class LoginController implements Serializable {
         return null;
     }
 
+    /**
+     * Loggt den Benutzer aus und leitet zur Startseite weiter.
+     * @return Navigation zur Startseite
+     */
     public String logout() {
         loggedIn = false;
         username = null;
@@ -36,7 +55,6 @@ public class LoginController implements Serializable {
         return "index?faces-redirect=true";
     }
 
-    // Getters und Setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }

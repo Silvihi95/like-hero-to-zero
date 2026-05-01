@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Login – Like Hero To Zero</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f0;
+        }
+        .header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 20px 40px;
+        }
+        .header h1 { margin: 0; }
+        .container {
+            max-width: 400px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        .login-box {
+            background-color: white;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .login-box h2 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .login-box input[type="text"],
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 16px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-box input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-box input[type="submit"]:hover {
+            background-color: #4caf50;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: #2e7d32;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="header">
+        <h1>🌍 Like Hero To Zero</h1>
+    </div>
+
+    <div class="container">
+        <div class="login-box">
+            <h2>Wissenschaftler Login</h2>
+            <h:form>
+                <h:outputLabel for="username" value="Benutzername" />
+                <h:inputText id="username" value="#{loginController.username}" />
+                <h:outputLabel for="password" value="Passwort" />
+                <h:inputSecret id="password" value="#{loginController.password}" />
+                <h:commandButton value="Einloggen" action="#{loginController.login}" />
+            </h:form>
+            <h:link styleClass="back-link" value="← Zurück zur Startseite" outcome="index" />
+        </div>
+    </div>
+</h:body>
+</html>

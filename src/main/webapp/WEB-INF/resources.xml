@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <Resource id="jdbc/likeherozero" type="DataSource">
+        JdbcDriver = com.mysql.cj.jdbc.Driver
+        JdbcUrl = jdbc:mysql://localhost:3306/likeherozero?serverTimezone=UTC&amp;useSSL=false&amp;allowPublicKeyRetrieval=true
+        UserName = root
+        Password = HAllo134!
+        JtaManaged = true
+    </Resource>
+</resources>
+

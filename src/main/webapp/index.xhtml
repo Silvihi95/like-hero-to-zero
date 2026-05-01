@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Like Hero To Zero</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f0;
+            color: #333;
+        }
+        .header {
+            background-color: #2e7d32;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .header a {
+            color: white;
+            text-decoration: none;
+            background-color: #1b5e20;
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        .header a:hover {
+            background-color: #4caf50;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .search-box {
+            background-color: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .search-box h2 {
+            margin-top: 0;
+            color: #2e7d32;
+        }
+        .search-box input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 250px;
+        }
+        .search-box input[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+        .search-box input[type="submit"]:hover {
+            background-color: #4caf50;
+        }
+        .results {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .results table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .results th {
+            background-color: #2e7d32;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+        }
+        .results td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+        }
+        .results tr:last-child td {
+            border-bottom: none;
+        }
+        .results tr:hover td {
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin-top: 12px;
+            color: #c62828;
+            font-weight: bold;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="header">
+        <h1>🌍 Like Hero To Zero</h1>
+        <h:link value="Login für Wissenschaftler" outcome="login" />
+    </div>
+
+    <div class="container">
+        <div class="search-box">
+            <h2>CO2 Emissionen weltweit</h2>
+            <h:form>
+                <h:inputText value="#{co2Controller.selectedCountryCode}" 
+                             placeholder="Ländercode (z.B. DE)" />
+                <h:commandButton value="Suchen" action="#{co2Controller.search}" />
+                <div class="message">
+                    <h:outputText value="#{co2Controller.message}" 
+                                  rendered="#{not empty co2Controller.message}" />
+                </div>
+            </h:form>
+        </div>
+
+        <div class="results" rendered="#{not empty co2Controller.results}">
+            <h:dataTable value="#{co2Controller.results}" var="e" 
+                         rendered="#{not empty co2Controller.results}">
+                <h:column>
+                    <f:facet name="header">Land</f:facet>
+                    #{e.country.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Jahr</f:facet>
+                    #{e.year}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">CO2 Ausstoß (kt)</f:facet>
+                    #{e.emissionKt}
+                </h:column>
+            </h:dataTable>
+        </div>
+    </div>
+</h:body>
+</html>

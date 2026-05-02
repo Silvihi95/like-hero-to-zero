@@ -4,6 +4,7 @@
  */
 package de.iubh.controller;
 
+import de.iubh.model.Scientist;
 import de.iubh.service.ScientistService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
@@ -19,37 +20,33 @@ import java.io.Serializable;
 @SessionScoped
 public class LoginController implements Serializable {
 
-    /** Service für Wissenschaftler-Operationen. */
     @Inject
     private ScientistService scientistService;
 
-    /** Eingegebener Benutzername. */
     private String username;
-
-    /** Eingegebenes Passwort. */
     private String password;
-
-    /** Gibt an ob der Benutzer eingeloggt ist. */
     private boolean loggedIn = false;
+    private boolean editor = false;
 
     /**
-     * Überprüft die Login-Daten und leitet bei Erfolg zum Dashboard weiter.
-     * @return Navigation zum Dashboard oder null bei Fehler
+     * Überprüft die Login-Daten und leitet bei Erfolg weiter.
      */
     public String login() {
-        if (scientistService.login(username, password)) {
+        Scientist s = scientistService.login(username, password);
+        if (s != null) {
             loggedIn = true;
+            editor = s.isEditor();
             return "dashboard?faces-redirect=true";
         }
         return null;
     }
 
     /**
-     * Loggt den Benutzer aus und leitet zur Startseite weiter.
-     * @return Navigation zur Startseite
+     * Loggt den Benutzer aus.
      */
     public String logout() {
         loggedIn = false;
+        editor = false;
         username = null;
         password = null;
         return "index?faces-redirect=true";
@@ -60,4 +57,5 @@ public class LoginController implements Serializable {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
     public boolean isLoggedIn() { return loggedIn; }
+    public boolean isEditor() { return editor; }
 }

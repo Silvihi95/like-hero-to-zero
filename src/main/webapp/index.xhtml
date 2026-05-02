@@ -100,7 +100,8 @@
 <h:body>
     <div class="header">
         <h1>🌍 Like Hero To Zero</h1>
-        <h:link value="Login für Wissenschaftler" outcome="login" />
+        <h:link value="🔐 Login" outcome="login"
+                style="background-color:#1b5e20; color:white; padding:8px 16px; border-radius:4px; text-decoration:none;"/>
     </div>
 
     <div class="container">
@@ -130,7 +131,9 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">CO2 Ausstoß (kt)</f:facet>
-                    #{e.emissionKt}
+                    <h:outputText value="#{e.emissionKt}">
+                        <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                    </h:outputText>
                 </h:column>
             </h:dataTable>
         </div>
@@ -153,7 +156,9 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">CO2 Ausstoß (kt)</f:facet>
-                        #{e.emissionKt}
+                        <h:outputText value="#{e.emissionKt}">
+                            <f:convertNumber maxFractionDigits="2" groupingUsed="true" />
+                        </h:outputText>
                     </h:column>
                 </h:dataTable>
             </div>

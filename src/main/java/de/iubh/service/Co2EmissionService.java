@@ -51,4 +51,37 @@ public class Co2EmissionService {
             Co2Emission.class)
             .getResultList();
     }
+
+    public List<Co2Emission> findPending() {
+        return em.createQuery(
+            "SELECT e FROM Co2Emission e WHERE e.status = :status ORDER BY e.year DESC",
+            Co2Emission.class)
+            .setParameter("status", Co2Emission.Status.PENDING)
+            .getResultList();
+    }
+
+    public List<Co2Emission> findLatestApprovedByCountry(Country country) {
+        return em.createQuery(
+            "SELECT e FROM Co2Emission e WHERE e.country = :country " +
+            "AND e.status = :status ORDER BY e.year DESC",
+            Co2Emission.class)
+            .setParameter("country", country)
+            .setParameter("status", Co2Emission.Status.APPROVED)
+            .setMaxResults(1)
+            .getResultList();
+    }
+
+    public List<Co2Emission> findLatestApprovedForAllCountries() {
+        return em.createQuery(
+            "SELECT e FROM Co2Emission e WHERE e.status = :status AND e.year = " +
+            "(SELECT MAX(e2.year) FROM Co2Emission e2 WHERE e2.country = e.country " +
+            "AND e2.status = :status) ORDER BY e.country.name ASC",
+            Co2Emission.class)
+            .setParameter("status", Co2Emission.Status.APPROVED)
+            .getResultList();
+    }
+
+    public Co2Emission findById(Long id) {
+        return em.find(Co2Emission.class, id);
+    }
 }

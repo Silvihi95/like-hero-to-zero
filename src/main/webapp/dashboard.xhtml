@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <title>Dashboard – Like Hero To Zero</title>
     <style>
@@ -21,7 +22,7 @@
         }
         .header h1 { margin: 0; }
         .container {
-            max-width: 700px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 0 20px;
         }
@@ -32,18 +33,10 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 24px;
         }
-        .card h2 {
-            margin-top: 0;
-            color: #2e7d32;
-        }
-        .form-row {
-            margin-bottom: 16px;
-        }
-        .form-row label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
+        .card h2 { margin-top: 0; color: #2e7d32; }
+        .card h3 { color: #1b5e20; }
+        .form-row { margin-bottom: 16px; }
+        .form-row label { display: block; margin-bottom: 4px; font-weight: bold; }
         .form-row input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -61,35 +54,61 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        input[type="submit"]:hover {
-            background-color: #4caf50;
+        input[type="submit"]:hover { background-color: #4caf50; }
+        .btn-red input[type="submit"] { background-color: #c62828; }
+        .btn-red input[type="submit"]:hover { background-color: #e53935; }
+        .btn-orange input[type="submit"] { background-color: #e65100; }
+        .btn-orange input[type="submit"]:hover { background-color: #ff6d00; }
+        .message { margin-top: 12px; color: #2e7d32; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background-color: #2e7d32;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
         }
-        .logout-btn input[type="submit"] {
-            background-color: #c62828;
+        td { padding: 12px 16px; border-bottom: 1px solid #eee; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: #f9f9f9; }
+        .badge-pending {
+            background-color: #e65100;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
         }
-        .logout-btn input[type="submit"]:hover {
-            background-color: #e53935;
+        .badge-approved {
+            background-color: #2e7d32;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
         }
-        .message {
-            margin-top: 12px;
-            color: #2e7d32;
-            font-weight: bold;
-        }
-        .no-access {
-            text-align: center;
-            padding: 40px;
+        .role-badge {
+            background-color: #1b5e20;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-left: 8px;
         }
     </style>
 </h:head>
 <h:body>
     <div class="header">
         <h1>🌍 Like Hero To Zero</h1>
-        <span>Willkommen, #{loginController.username}!</span>
+        <span>
+            Willkommen, #{loginController.username}!
+            <span class="role-badge">
+                #{loginController.editor ? 'Herausgeber' : 'Wissenschaftler'}
+            </span>
+        </span>
     </div>
 
     <div class="container">
+
         <h:panelGroup rendered="#{!loginController.loggedIn}">
-            <div class="card no-access">
+            <div class="card">
                 <h2>Kein Zugriff!</h2>
                 <p>Bitte erst einloggen.</p>
                 <h:link value="Zum Login" outcome="login" />
@@ -97,12 +116,56 @@
         </h:panelGroup>
 
         <h:panelGroup rendered="#{loginController.loggedIn}">
+
+            <!-- FREIGABE BEREICH (nur für Herausgeber) -->
+            <h:panelGroup rendered="#{loginController.editor}">
+                <div class="card">
+                    <h2>📋 Ausstehende Freigaben</h2>
+                    <h:panelGroup rendered="#{empty co2Controller.pendingEmissions}">
+                        <p>Keine ausstehenden Einträge.</p>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not empty co2Controller.pendingEmissions}">
+                        <table>
+                            <tr>
+                                <th>Land</th>
+                                <th>Jahr</th>
+                                <th>CO2 (kt)</th>
+                                <th>Status</th>
+                                <th>Aktion</th>
+                            </tr>
+                            <h:dataTable value="#{co2Controller.pendingEmissions}" var="e">
+                                <h:column>#{e.country.name}</h:column>
+                                <h:column>#{e.year}</h:column>
+                                <h:column>#{e.emissionKt}</h:column>
+                                <h:column>
+                                    <span class="badge-pending">AUSSTEHEND</span>
+                                </h:column>
+                                <h:column>
+                                    <h:form>
+                                        <h:inputHidden value="#{e.id}" />
+                                        <h:commandButton value="✓ Freigeben"
+                                            action="#{co2Controller.approve(e.id)}" />
+                                    </h:form>
+                                    <h:form style="display:inline; margin-left:8px;">
+                                        <span class="btn-red">
+                                            <h:commandButton value="✗ Ablehnen"
+                                                action="#{co2Controller.reject(e.id)}" />
+                                        </span>
+                                    </h:form>
+                                </h:column>
+                            </h:dataTable>
+                        </table>
+                    </h:panelGroup>
+                </div>
+            </h:panelGroup>
+
+            <!-- NEUE EMISSION EINTRAGEN -->
             <div class="card">
-                <h2>Neue CO2 Emission eintragen</h2>
+                <h2>➕ Neue CO2 Emission eintragen</h2>
                 <h:form>
                     <div class="form-row">
-                        <h:outputLabel for="countryCode" value="Ländercode (z.B. DEU)" />
-                        <h:inputText id="countryCode" 
+                        <h:outputLabel for="countryCode" value="Ländercode (z.B. DE)" />
+                        <h:inputText id="countryCode"
                                      value="#{co2Controller.selectedCountryCodeForNew}" />
                     </div>
                     <div class="form-row">
@@ -111,22 +174,26 @@
                     </div>
                     <div class="form-row">
                         <h:outputLabel for="emission" value="CO2 Ausstoß in kt" />
-                        <h:inputText id="emission" 
+                        <h:inputText id="emission"
                                      value="#{co2Controller.newEmission.emissionKt}" />
                     </div>
                     <h:commandButton value="Speichern" action="#{co2Controller.save}" />
                     <div class="message">
-                        <h:outputText value="#{co2Controller.message}" 
+                        <h:outputText value="#{co2Controller.message}"
                                       rendered="#{not empty co2Controller.message}" />
                     </div>
                 </h:form>
             </div>
 
-            <div class="card logout-btn">
-                <h:form>
-                    <h:commandButton value="Ausloggen" action="#{loginController.logout}" />
-                </h:form>
+            <!-- AUSLOGGEN -->
+            <div class="card">
+                <span class="btn-red">
+                    <h:form>
+                        <h:commandButton value="Ausloggen" action="#{loginController.logout}" />
+                    </h:form>
+                </span>
             </div>
+
         </h:panelGroup>
     </div>
 </h:body>

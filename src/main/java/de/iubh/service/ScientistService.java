@@ -10,12 +10,18 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
+/**
+ * Service-Klasse für Wissenschaftler-Operationen.
+ */
 @Stateless
 public class ScientistService {
 
     @PersistenceContext(unitName = "likeHeroToZeroPU")
     private EntityManager em;
 
+    /**
+     * Sucht einen Wissenschaftler anhand des Benutzernamens.
+     */
     public Scientist findByUsername(String username) {
         List<Scientist> result = em.createQuery(
             "SELECT s FROM Scientist s WHERE s.username = :username", Scientist.class)
@@ -24,11 +30,20 @@ public class ScientistService {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    public boolean login(String username, String password) {
+    /**
+     * Überprüft Login-Daten.
+     */
+    public Scientist login(String username, String password) {
         Scientist s = findByUsername(username);
-        return s != null && s.getPassword().equals(password);
+        if (s != null && s.getPassword().equals(password)) {
+            return s;
+        }
+        return null;
     }
 
+    /**
+     * Speichert einen neuen Wissenschaftler.
+     */
     public void save(Scientist scientist) {
         em.persist(scientist);
     }

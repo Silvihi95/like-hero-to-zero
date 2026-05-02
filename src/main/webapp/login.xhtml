@@ -18,7 +18,7 @@
         }
         .header h1 { margin: 0; }
         .container {
-            max-width: 400px;
+            max-width: 500px;
             margin: 60px auto;
             padding: 0 20px;
         }
@@ -31,35 +31,70 @@
         .login-box h2 {
             margin-top: 0;
             color: #2e7d32;
+            text-align: center;
         }
-        .login-box input[type="text"],
-        .login-box input[type="password"] {
+        .form-row { margin-bottom: 16px; }
+        .form-row label { display: block; margin-bottom: 4px; font-weight: bold; }
+        .form-row input[type="text"],
+        .form-row input[type="password"] {
             width: 100%;
             padding: 10px;
-            margin: 8px 0 16px 0;
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
         }
-        .login-box input[type="submit"] {
-            width: 100%;
+        .button-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-scientist input[type="submit"] {
+            flex: 1;
             padding: 12px;
-            font-size: 16px;
+            font-size: 15px;
             background-color: #2e7d32;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            width: 100%;
         }
-        .login-box input[type="submit"]:hover {
-            background-color: #4caf50;
+        .btn-scientist input[type="submit"]:hover { background-color: #4caf50; }
+        .btn-editor input[type="submit"] {
+            flex: 1;
+            padding: 12px;
+            font-size: 15px;
+            background-color: #1565c0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
         }
+        .btn-editor input[type="submit"]:hover { background-color: #1976d2; }
         .back-link {
             display: block;
             text-align: center;
             margin-top: 16px;
             color: #2e7d32;
+            text-decoration: none;
+        }
+        .error { color: #c62828; text-align: center; margin-top: 12px; font-weight: bold; }
+        .divider {
+            text-align: center;
+            margin: 24px 0 16px 0;
+            color: #777;
+            font-size: 13px;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            display: inline-block;
+            width: 30%;
+            height: 1px;
+            background: #ccc;
+            vertical-align: middle;
+            margin: 0 8px;
         }
     </style>
 </h:head>
@@ -70,14 +105,39 @@
 
     <div class="container">
         <div class="login-box">
-            <h2>Wissenschaftler Login</h2>
+            <h2>🔐 Login</h2>
+
             <h:form>
-                <h:outputLabel for="username" value="Benutzername" />
-                <h:inputText id="username" value="#{loginController.username}" />
-                <h:outputLabel for="password" value="Passwort" />
-                <h:inputSecret id="password" value="#{loginController.password}" />
-                <h:commandButton value="Einloggen" action="#{loginController.login}" />
+                <div class="form-row">
+                    <h:outputLabel for="username" value="Benutzername" />
+                    <h:inputText id="username" value="#{loginController.username}" />
+                </div>
+                <div class="form-row">
+                    <h:outputLabel for="password" value="Passwort" />
+                    <h:inputSecret id="password" value="#{loginController.password}" />
+                </div>
+
+                <div class="divider">Einloggen als</div>
+
+                <div class="button-row">
+                    <span class="btn-scientist" style="flex:1;">
+                        <h:commandButton value="🔬 Wissenschaftler"
+                                         action="#{loginController.login}" 
+                                         style="width:100%"/>
+                    </span>
+                    <span class="btn-editor" style="flex:1;">
+                        <h:commandButton value="📋 Herausgeber"
+                                         action="#{loginController.login}"
+                                         style="width:100%"/>
+                    </span>
+                </div>
+
+                <div class="error">
+                    <h:outputText value="Benutzername oder Passwort falsch!"
+                                  rendered="#{not loginController.loggedIn and not empty loginController.username}" />
+                </div>
             </h:form>
+
             <h:link styleClass="back-link" value="← Zurück zur Startseite" outcome="index" />
         </div>
     </div>

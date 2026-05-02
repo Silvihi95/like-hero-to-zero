@@ -9,11 +9,16 @@ import jakarta.persistence.*;
 /**
  * Entity-Klasse für eine CO2-Emission.
  * Repräsentiert einen Datensatz in der Tabelle "co2_emissions".
- * Jede Emission ist einem Land zugeordnet.
+ * Jede Emission ist einem Land zugeordnet und hat einen Status.
  */
 @Entity
 @Table(name = "co2_emissions")
 public class Co2Emission {
+
+    /** Mögliche Status-Werte für eine Emission. */
+    public enum Status {
+        PENDING, APPROVED
+    }
 
     /** Eindeutiger Primärschlüssel, wird automatisch generiert. */
     @Id
@@ -33,6 +38,11 @@ public class Co2Emission {
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
+    /** Status der Emission: PENDING oder APPROVED. */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.APPROVED;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public int getYear() { return year; }
@@ -41,4 +51,6 @@ public class Co2Emission {
     public void setEmissionKt(double emissionKt) { this.emissionKt = emissionKt; }
     public Country getCountry() { return country; }
     public void setCountry(Country country) { this.country = country; }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
 }
